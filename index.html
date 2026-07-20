@@ -16,7 +16,21 @@
 <meta name="twitter:image" content="https://guistawichs.github.io/storyforge/og.jpg">
 <meta name="theme-color" content="#0A0C11">
 <link rel="canonical" href="https://guistawichs.github.io/storyforge/">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230C0E12'/%3E%3Crect x='7' y='8' width='18' height='4' rx='2' fill='%23E5484D'/%3E%3Crect x='7' y='14' width='13' height='4' rx='2' fill='%234C8DFF'/%3E%3Crect x='7' y='20' width='16' height='4' rx='2' fill='%23E8B04B'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"StoryForge","description":"Workspace de roteiro, referências e timing para canais de terror, mistério, crime e história.","applicationCategory":"MultimediaApplication","operatingSystem":"Web","url":"https://guistawichs.github.io/storyforge/","offers":{"@type":"Offer","price":"47.00","priceCurrency":"BRL","description":"Licença vitalícia, pagamento único via Pix"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Tem mensalidade?","acceptedAnswer":{"@type":"Answer","text":"Não. Pagamento único, licença vitalícia. Não existe servidor cobrando todo mês, então não existe assinatura."}},
+{"@type":"Question","name":"Onde ficam meus roteiros e imagens?","acceptedAnswer":{"@type":"Answer","text":"No seu navegador, no seu computador. Nada sobe pra nuvem. Exporte o backup .json de tempos em tempos."}},
+{"@type":"Question","name":"Funciona no celular?","acceptedAnswer":{"@type":"Answer","text":"Funciona (as três colunas viram abas), mas a ferramenta brilha mesmo no desktop."}},
+{"@type":"Question","name":"E se eu trocar de computador ou limpar o navegador?","acceptedAnswer":{"@type":"Answer","text":"Importa o backup .json e ativa com a mesma chave. Sua chave vale em quantos navegadores você usar."}},
+{"@type":"Question","name":"Como recebo o acesso?","acceptedAnswer":{"@type":"Answer","text":"Depois do Pix, você manda o comprovante e seu e-mail no WhatsApp. A chave é gerada na hora — normalmente em poucos minutos."}},
+{"@type":"Question","name":"Posso testar antes?","acceptedAnswer":{"@type":"Answer","text":"Sim, sem cadastro: a demonstração é o app de verdade com um caso real carregado. Só não salva nem exporta."}}
+]}
+</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230C0E12'/%3E%3Crect x='7' y='8' width='18' height='4' rx='2' fill='%23E5484D'/%3E%3Crect x='7' y='14' width='13' height='4' rx='2' fill='%234C8DFF'/%3E%3Crect x='7' y='20' width='16' height='4' rx='2' fill='%233DD68C'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Lora:ital@0;1&display=swap" rel="stylesheet">
@@ -68,8 +82,8 @@ button{font-family:var(--f-ui);cursor:pointer;border:none;background:none;color:
   border:1px solid var(--line2);background:var(--panel2);transition:background .15s,transform .12s,box-shadow .2s;
 }
 .btn:hover{background:var(--card);transform:translateY(-1px)}
-.btn.gold{background:var(--time);border-color:var(--time);color:#151004;box-shadow:0 0 0 rgba(232,176,75,0)}
-.btn.gold:hover{background:#F2C065;box-shadow:0 6px 28px rgba(232,176,75,.28)}
+.btn.gold{background:linear-gradient(180deg,#E5484D,#C93338);border-color:#D8393E;color:#fff;box-shadow:0 0 0 rgba(229,72,77,0)}
+.btn.gold:hover{background:linear-gradient(180deg,#F05A5E,#D43C41);box-shadow:0 6px 28px rgba(229,72,77,.35)}
 .eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--brand-hi)}
 
 /* ---- régua de timeline fixa (assinatura) ---- */
@@ -106,7 +120,7 @@ nav .btn{padding:9px 16px;font-size:14px}
   line-height:.99;letter-spacing:-.042em;max-width:840px;margin:16px 0 20px;
   font-variation-settings:'opsz' 96;
 }
-.hero h1 em{font-style:normal;color:var(--brand-hi);text-shadow:0 0 30px rgba(229,72,77,.5)}
+.hero h1 em{font-style:normal;color:var(--brand-hi)}
 .hero h1 .dim{color:var(--faint)}
 .hero p{color:var(--dim);font-size:18px;max-width:620px}
 .hero .ctas{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}
@@ -144,12 +158,12 @@ nav .btn{padding:9px 16px;font-size:14px}
 .mblock .mt{font-family:var(--f-mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-bottom:4px}
 .mblock .mx{font-family:var(--f-script);font-size:12.5px;line-height:1.55;color:var(--dim)}
 .mblock .mf{font-family:var(--f-mono);font-size:9.5px;color:var(--faint);margin-top:6px}
-.mblock .mf b{color:var(--time);font-weight:600}
+.mblock .mf b{color:var(--ink);font-weight:600}
 .mitem{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 9px;margin-bottom:8px;display:flex;gap:7px;align-items:flex-start}
 .mtag{font-family:var(--f-mono);font-size:8.5px;letter-spacing:.06em;font-weight:600;padding:2px 5px;border-radius:4px;flex-shrink:0}
 .mitem small{color:var(--dim);font-size:11px;line-height:1.45;word-break:break-word}
 .trow{display:flex;gap:8px;align-items:baseline;padding:6px 8px;border-left:3px solid var(--dev);border-radius:6px;margin-bottom:4px}
-.trow .ts{font-family:var(--f-mono);font-size:10.5px;color:var(--time);flex-shrink:0}
+.trow .ts{font-family:var(--f-mono);font-size:10.5px;color:var(--dim);flex-shrink:0}
 .trow small{color:var(--dim);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mock-cursor{display:inline-block;width:7px;height:13px;background:var(--brand);vertical-align:-2px;animation:blink 1.1s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
@@ -210,19 +224,17 @@ section[id]{scroll-margin-top:70px}
 
 /* preço */
 #preco .card{
-  --glow-fill:rgba(232,176,75,.13);
-  --glow-edge:var(--time);
   background:radial-gradient(260px 260px at var(--gx) var(--gy),var(--glow-fill),transparent 58%) fixed,linear-gradient(180deg,var(--panel2),var(--panel));
   border:1px solid var(--line2);
   border-radius:20px;padding:36px 30px;max-width:520px;margin:0 auto;text-align:center;
   position:relative;box-shadow:0 0 90px rgba(167,139,250,.12),0 30px 80px rgba(0,0,0,.45);
 }
 #preco .card::before{content:'';position:absolute;top:0;left:24px;right:24px;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,var(--climax),transparent)}
-#preco .selo{display:inline-block;font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--time);background:var(--time-dim);border-radius:99px;padding:6px 14px}
+#preco .selo{display:inline-block;font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--brand-hi);background:var(--brand-dim);border-radius:99px;padding:6px 14px}
 #preco .valores{margin:18px 0 6px;display:flex;align-items:baseline;justify-content:center;gap:14px}
 #preco .antes{color:var(--faint);text-decoration:line-through;font-size:20px;font-family:var(--f-mono)}
 #preco .agora{font-family:var(--f-disp);font-weight:800;font-size:clamp(56px,9vw,72px);letter-spacing:-.035em;line-height:1}
-#preco .agora small{font-size:24px;font-weight:700;vertical-align:26px;margin-right:2px}
+#preco .agora small{font-size:24px;font-weight:700;vertical-align:26px;margin-right:2px;color:var(--brand-hi)}
 #preco .sub{color:var(--dim);font-size:14px}
 #preco ul{list-style:none;text-align:left;margin:22px auto 26px;max-width:360px}
 #preco li{padding:7px 0;color:var(--dim);font-size:14.5px;border-bottom:1px dashed var(--line)}
@@ -263,7 +275,7 @@ footer a{color:var(--brand-hi)}
 .modal .close:hover{color:var(--ink)}
 .modal p{color:var(--dim);font-size:14px;margin-top:6px}
 .pixcode{
-  font-family:var(--f-mono);font-size:11.5px;line-height:1.5;color:var(--time);
+  font-family:var(--f-mono);font-size:11.5px;line-height:1.5;color:var(--ink);
   background:var(--panel2);border:1px solid var(--line);border-radius:10px;
   padding:13px;margin:16px 0 10px;word-break:break-all;max-height:130px;overflow-y:auto;user-select:all;
 }
@@ -393,7 +405,7 @@ footer a{color:var(--brand-hi)}
   <div class="passos">
     <div class="passo reveal glow" style="border-top-color:var(--hook)"><span class="k" style="color:var(--hook)">1 · Escreva</span><h3>Roteiro em blocos</h3><p>Gancho, contexto, desenvolvimento, clímax e CTA — cada bloco com sua cor, contagem de palavras e tempo de fala.</p></div>
     <div class="passo reveal glow" style="border-top-color:var(--ctx)"><span class="k" style="color:var(--ctx)">2 · Ancore</span><h3>Referência no trecho certo</h3><p>Links, fotos de época (cole com Ctrl+V), notas de b-roll e coordenadas com atalho direto pro Google Maps — presas ao bloco que vão ilustrar.</p></div>
-    <div class="passo reveal glow" style="border-top-color:var(--time)"><span class="k" style="color:var(--time)">3 · Grave</span><h3>Timing e teleprompter</h3><p>O tempo total se recalcula enquanto você digita, avisos de retenção apontam problemas, e o teleprompter rola na velocidade exata da sua narração.</p></div>
+    <div class="passo reveal glow" style="border-top-color:var(--climax)"><span class="k" style="color:var(--climax)">3 · Grave</span><h3>Timing e teleprompter</h3><p>O tempo total se recalcula enquanto você digita, avisos de retenção apontam problemas, e o teleprompter rola na velocidade exata da sua narração.</p></div>
   </div>
 </section>
 
@@ -467,7 +479,8 @@ footer a{color:var(--brand-hi)}
 </section>
 
 <footer>
-  StoryForge · feito por um dev independente no Brasil · <a href="#" id="footDemo">abrir demonstração</a>
+  StoryForge · feito por um dev independente no Brasil<br>
+  <a href="#" id="footDemo">abrir demonstração</a> · <a href="termos.html">termos</a> · <a href="privacidade.html">privacidade</a>
 </footer>
 </div>
 
