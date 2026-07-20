@@ -1,0 +1,17 @@
+name: keep-alive
+
+# Pinga o Supabase 2x por semana pra impedir que o projeto free seja pausado por inatividade.
+on:
+  schedule:
+    - cron: '17 12 * * 1,4' # seg e qui, 12:17 UTC
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping validate (toca Edge Function + banco)
+        run: |
+          curl -s -X POST https://qiqwcjdfdlbdfiaxbuya.supabase.co/functions/v1/validate \
+            -H 'content-type: application/json' \
+            -d '{"email":"keepalive@storyforge.dev","key":"AAAA-BBBB-CCCC"}'

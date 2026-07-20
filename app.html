@@ -544,6 +544,41 @@ function validarLic(email,key){
 }
 /*SF_HASH_END*/
 
+/* ===== Licença viva (v2): confirma a assinatura no servidor =====
+   Local continua mandando (offline-first). O servidor só derruba quando:
+   - reembolso/cancelamento efetivado (valid:false), ou
+   - licença gerenciada pelo servidor ficou 7 dias sem conseguir confirmar.
+   Chave manual/vitalícia antiga nunca aparece no servidor (found:false) → segue 100% local. */
+const SF_API='https://qiqwcjdfdlbdfiaxbuya.supabase.co/functions/v1';
+const SRV_GRACE_MS=7*24*60*60*1000;
+function licSalva(){try{return JSON.parse(localStorage.getItem('sf_lic')||'null')}catch(e){return null}}
+function licGravar(l){try{localStorage.setItem('sf_lic',JSON.stringify(l))}catch(e){}}
+async function checarServidor(){
+  const l=licSalva();if(!l||!l.email||!l.key)return;
+  let resp=null;
+  try{
+    const r=await fetch(SF_API+'/validate',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:l.email,key:l.key})});
+    if(r.ok)resp=await r.json();
+  }catch(e){}
+  if(resp&&resp.found===false){l.srv=false;licGravar(l);return}
+  if(resp&&resp.found){
+    if(resp.valid){l.srv=true;l.lastSrvOk=Date.now();licGravar(l);return}
+    try{localStorage.removeItem('sf_lic')}catch(e){}
+    bloquearLicenca(resp.status==='refunded'
+      ?'Sua compra foi reembolsada, então a licença foi encerrada.'
+      :'Sua assinatura não está mais ativa. Renove e me chame no WhatsApp que te envio a nova chave.');
+    return;
+  }
+  if(l.srv===true&&l.lastSrvOk&&(Date.now()-l.lastSrvOk)>SRV_GRACE_MS){
+    bloquearLicenca('Não consigo confirmar sua assinatura há mais de 7 dias. Conecte-se à internet e recarregue a página.');
+  }
+}
+function bloquearLicenca(msg){
+  const err=$('#licErr');
+  $('#activation').classList.add('open');
+  if(err){err.style.display='block';err.textContent=msg}
+}
+
 /* ================= ARMAZENAMENTO ================= */
 const canPersist=(()=>{try{localStorage.setItem('_sf_t','1');localStorage.removeItem('_sf_t');return true}catch(e){return false}})();
 const mem=new Map();
@@ -941,7 +976,7 @@ function boot(){
     startDemo(false);
     return;
   }
-  if(checkLic())renderHome();
+  if(checkLic()){renderHome();checarServidor();}
   else $('#activation').classList.add('open');
 }
 
@@ -960,6 +995,7 @@ $('#btnAtivar').addEventListener('click',()=>{
     document.body.classList.remove('has-banner');
     toast('Licença ativada. Bom trabalho.');
     renderHome();
+    checarServidor();
   }else if(st==='expirada'){
     err.style.display='block';
     err.textContent='Essa chave venceu. Renove sua assinatura e me chame no WhatsApp que te envio a nova na hora.';
