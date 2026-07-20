@@ -748,13 +748,14 @@ function renderMedia(){
   L.innerHTML=b.media.map(m=>{
     const ks=KIND_STYLE[m.kind]||['?','var(--dim)'];
     let imgTag='',inner='';
+    const httpUrl=/^https?:\/\//i.test(String(m.url||''))?m.url:'';
     if(m.kind==='imagem'){
-      const src=m.data||m.url||'';
+      const src=(typeof m.data==='string'&&/^data:image\//i.test(m.data))?m.data:httpUrl;
       imgTag=src?'<img src="'+esc(src)+'" alt="'+esc(m.label||'referência')+'" loading="lazy" onerror="this.remove()">':'';
-      inner='<div class="lbl">'+esc(m.label||'Imagem de referência')+'</div>'+(m.url?'<small><a href="'+esc(m.url)+'" target="_blank" rel="noopener">abrir original ↗</a></small>':'');
+      inner='<div class="lbl">'+esc(m.label||'Imagem de referência')+'</div>'+(httpUrl?'<small><a href="'+esc(httpUrl)+'" target="_blank" rel="noopener">abrir original ↗</a></small>':'');
     }else if(m.kind==='link'){
-      let dom='';try{dom=new URL(m.url).hostname.replace(/^www\./,'')}catch(e){dom=''}
-      inner='<div class="lbl">'+esc(m.label||dom||'Link')+'</div><small>'+esc(m.url)+'</small><a href="'+esc(m.url)+'" target="_blank" rel="noopener">abrir ↗</a>';
+      let dom='';try{dom=new URL(httpUrl).hostname.replace(/^www\./,'')}catch(e){dom=''}
+      inner='<div class="lbl">'+esc(m.label||dom||'Link')+'</div><small>'+esc(m.url)+'</small>'+(httpUrl?'<a href="'+esc(httpUrl)+'" target="_blank" rel="noopener">abrir ↗</a>':'');
     }else if(m.kind==='coords'){
       inner='<div class="lbl">'+esc(m.label||'Local no mapa')+'</div><small style="font-family:var(--f-mono)">'+esc(m.lat)+', '+esc(m.lng)+'</small><a href="https://www.google.com/maps?q='+esc(m.lat)+','+esc(m.lng)+'" target="_blank" rel="noopener">abrir no Google Maps ↗</a>';
     }else{
@@ -1014,9 +1015,34 @@ $('#fileJson').addEventListener('change',e=>{
       if(!p||!Array.isArray(p.blocks))throw new Error('formato');
       if(demoMode){toast('Importação indisponível no modo demonstração');return}
       p.id=uid();p.updatedAt=Date.now();
-      p.name=p.name||'Projeto importado';
-      p.wpm=+p.wpm||150;p.target=+p.target||180;
-      p.blocks.forEach(b=>{b.id=b.id||uid();b.title=b.title||'';b.text=b.text||'';b.type=TYPES[b.type]?b.type:'livre';b.media=Array.isArray(b.media)?b.media:[]});
+      p.name=String(p.name||'Projeto importado').slice(0,120);
+      p.wpm=Math.min(190,Math.max(110,+p.wpm||150));
+      p.target=Math.min(7200,Math.max(10,+p.target||180));
+      p.blocks=p.blocks.map(b=>{
+        if(!b||typeof b!=='object')return null;
+        const nb={id:uid(),type:TYPES[b.type]?b.type:'livre',title:String(b.title||'').slice(0,200),text:String(b.text||''),media:[]};
+        (Array.isArray(b.media)?b.media:[]).forEach(m=>{
+          if(!m||typeof m!=='object')return;
+          const kind=KIND_STYLE[m.kind]?m.kind:'nota';
+          const it={id:uid(),kind:kind,label:String(m.label||'').slice(0,300)};
+          if(kind==='link'||kind==='imagem'){
+            const u=String(m.url||'');
+            if(/^https?:\/\//i.test(u))it.url=u;
+            else if(kind==='link')return;
+          }
+          if(kind==='imagem'){
+            if(typeof m.data==='string'&&/^data:image\/(png|jpe?g|webp|gif);base64,/i.test(m.data))it.data=m.data;
+            if(!it.url&&!it.data)it.kind='nota';
+          }
+          if(kind==='coords'){
+            const la=parseFloat(m.lat),ln=parseFloat(m.lng);
+            if(!isFinite(la)||!isFinite(ln)||Math.abs(la)>90||Math.abs(ln)>180)return;
+            it.lat=String(la);it.lng=String(ln);
+          }
+          nb.media.push(it);
+        });
+        return nb;
+      }).filter(Boolean);
       await dbPut(p);
       toast('Projeto importado');
       if(importTo==='editor'){PROJ=p;enterEditor()}else renderHome();
