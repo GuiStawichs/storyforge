@@ -105,7 +105,22 @@ nav .btn{padding:9px 16px;font-size:14px}
 /* mock das 3 colunas */
 .mock{
   margin:52px 0 0;background:var(--panel);border:1px solid var(--line);border-radius:16px;
-  overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.5);
+  overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.5);position:relative;
+}
+/* varredura de scanner (estética do hero futurista, em vanilla) */
+.mock::after{
+  content:'';position:absolute;left:0;right:0;top:0;height:32%;z-index:4;pointer-events:none;
+  background:linear-gradient(180deg,transparent 0%,rgba(76,141,255,.04) 52%,rgba(229,72,77,.10) 85%,rgba(255,138,110,.28) 99%);
+  border-bottom:1px solid rgba(255,150,120,.5);
+  box-shadow:0 2px 22px 1px rgba(229,72,77,.22);
+  mix-blend-mode:screen;
+  animation:mscan 5.4s ease-in-out infinite;
+}
+@keyframes mscan{
+  0%{transform:translateY(-34%);opacity:0}
+  9%{opacity:.85}
+  88%{opacity:.85}
+  100%{transform:translateY(315%);opacity:0}
 }
 .mock-top{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);font-family:var(--f-mono);font-size:11px;color:var(--faint)}
 .mock-top i{width:9px;height:9px;border-radius:50%;background:var(--line2);display:block}
@@ -143,9 +158,35 @@ section[id]{scroll-margin-top:70px}
 .frag p{font-family:var(--f-script);font-style:italic;font-size:clamp(17px,2.4vw,21px);line-height:1.6;color:var(--dim);margin-top:6px}
 .frag p b{color:var(--ink);font-weight:600;font-style:normal;font-family:var(--f-ui);font-size:.9em}
 
+/* ---- spotlight glow (segue o cursor, técnica portada do GlowCard, nas nossas cores) ---- */
+.glow{
+  --gx:-400px;--gy:-400px;
+  --glow-fill:rgba(232,176,75,.16);
+  --glow-edge:var(--time);
+  position:relative;
+}
+.glow::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:2;
+  padding:1.5px;
+  background:radial-gradient(250px 250px at var(--gx) var(--gy),var(--glow-edge),transparent 66%);
+  background-attachment:fixed;filter:brightness(1.6);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;
+  opacity:0;transition:opacity .4s;
+}
+/* halo suave por trás do card, também seguindo o cursor */
+.glow::before{
+  content:'';position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;z-index:0;
+  background:radial-gradient(200px 200px at var(--gx) var(--gy),var(--glow-edge),transparent 60%);
+  background-attachment:fixed;filter:blur(11px);opacity:0;transition:opacity .4s;
+}
+.pointer-fine .glow::after{opacity:1}
+.pointer-fine .glow:hover::before{opacity:.32}
+.glow>*{position:relative;z-index:1}
+
 /* como funciona */
 .passos{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
-.passo{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;border-top:3px solid var(--dev)}
+.passo{background:radial-gradient(230px 230px at var(--gx) var(--gy),var(--glow-fill),transparent 60%) fixed,var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;border-top:3px solid var(--dev)}
 .passo h3{font-family:var(--f-disp);font-weight:700;font-size:18px;letter-spacing:-.01em}
 .passo p{color:var(--dim);font-size:14.5px;margin-top:8px}
 .passo .k{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;display:block}
@@ -159,7 +200,9 @@ section[id]{scroll-margin-top:70px}
 
 /* preço */
 #preco .card{
-  background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line2);
+  --glow-fill:rgba(232,176,75,.13);
+  background:radial-gradient(260px 260px at var(--gx) var(--gy),var(--glow-fill),transparent 58%) fixed,linear-gradient(180deg,var(--panel2),var(--panel));
+  border:1px solid var(--line2);
   border-radius:20px;padding:36px 30px;max-width:520px;margin:0 auto;text-align:center;
   position:relative;box-shadow:0 0 90px rgba(167,139,250,.12),0 30px 80px rgba(0,0,0,.45);
 }
@@ -337,9 +380,9 @@ footer a{color:var(--time)}
     <h2>Três colunas. Uma história.</h2>
   </div>
   <div class="passos">
-    <div class="passo reveal" style="border-top-color:var(--hook)"><span class="k" style="color:var(--hook)">1 · Escreva</span><h3>Roteiro em blocos</h3><p>Gancho, contexto, desenvolvimento, clímax e CTA — cada bloco com sua cor, contagem de palavras e tempo de fala.</p></div>
-    <div class="passo reveal" style="border-top-color:var(--ctx)"><span class="k" style="color:var(--ctx)">2 · Ancore</span><h3>Referência no trecho certo</h3><p>Links, fotos de época (cole com Ctrl+V), notas de b-roll e coordenadas com atalho direto pro Google Maps — presas ao bloco que vão ilustrar.</p></div>
-    <div class="passo reveal" style="border-top-color:var(--time)"><span class="k" style="color:var(--time)">3 · Grave</span><h3>Timing e teleprompter</h3><p>O tempo total se recalcula enquanto você digita, avisos de retenção apontam problemas, e o teleprompter rola na velocidade exata da sua narração.</p></div>
+    <div class="passo reveal glow" style="border-top-color:var(--hook)"><span class="k" style="color:var(--hook)">1 · Escreva</span><h3>Roteiro em blocos</h3><p>Gancho, contexto, desenvolvimento, clímax e CTA — cada bloco com sua cor, contagem de palavras e tempo de fala.</p></div>
+    <div class="passo reveal glow" style="border-top-color:var(--ctx)"><span class="k" style="color:var(--ctx)">2 · Ancore</span><h3>Referência no trecho certo</h3><p>Links, fotos de época (cole com Ctrl+V), notas de b-roll e coordenadas com atalho direto pro Google Maps — presas ao bloco que vão ilustrar.</p></div>
+    <div class="passo reveal glow" style="border-top-color:var(--time)"><span class="k" style="color:var(--time)">3 · Grave</span><h3>Timing e teleprompter</h3><p>O tempo total se recalcula enquanto você digita, avisos de retenção apontam problemas, e o teleprompter rola na velocidade exata da sua narração.</p></div>
   </div>
 </section>
 
@@ -367,7 +410,7 @@ footer a{color:var(--time)}
   <div class="sec-head reveal" style="text-align:center;margin-left:auto;margin-right:auto">
     <h2>Uma tarde de pesquisa organizada já paga a ferramenta.</h2>
   </div>
-  <div class="card reveal">
+  <div class="card reveal glow">
     <span class="selo">Preço de fundador · primeiros 20</span>
     <div class="valores"><span class="antes">R$97</span><span class="agora"><small>R$</small><span data-preco-num>47</span></span></div>
     <div class="sub">pagamento único · licença vitalícia</div>
@@ -576,6 +619,15 @@ addEventListener('scroll',railQueue,{passive:true});
 addEventListener('resize',()=>{medirBlocos();railQueue()});
 addEventListener('load',()=>{medirBlocos();railQueue()});
 medirBlocos();railUpdate();
+
+/* ---------- Spotlight glow: cursor move o gradiente fixo dos cards ---------- */
+if(window.matchMedia&&window.matchMedia('(pointer:fine)').matches){
+  document.documentElement.classList.add('pointer-fine');
+  const root=document.documentElement.style;
+  let gx=0,gy=0,gTick=false;
+  function gApply(){gTick=false;root.setProperty('--gx',gx+'px');root.setProperty('--gy',gy+'px')}
+  addEventListener('pointermove',e=>{gx=e.clientX;gy=e.clientY;if(!gTick){gTick=true;requestAnimationFrame(gApply)}},{passive:true});
+}
 
 /* ---------- Reveals ---------- */
 if('IntersectionObserver' in window && motionOK){
