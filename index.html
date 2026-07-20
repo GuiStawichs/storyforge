@@ -14,7 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&family=Lora:ital@0;1&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0C0E12; --panel:#12151C; --panel2:#171B24; --card:#151924;
+  --bg:#0A0C11; --panel:#12151C; --panel2:#171B24; --card:#151924;
   --line:#242B39; --line2:#2E3648;
   --ink:#E9EBF1; --dim:#8A93A6; --faint:#5A6274;
   --time:#E8B04B; --time-dim:rgba(232,176,75,.12);
@@ -26,54 +26,91 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+body{
+  background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(1100px 520px at 78% -8%, rgba(76,141,255,.055), transparent 60%),
+    radial-gradient(900px 600px at -10% 24%, rgba(229,72,77,.04), transparent 55%),
+    radial-gradient(1400px 900px at 50% 120%, rgba(0,0,0,.55), transparent 60%);
+}
+.grain{
+  position:fixed;inset:-4%;z-index:1;pointer-events:none;opacity:.16;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.32'/%3E%3C/svg%3E");
+  animation:grain 9s steps(9) infinite;
+}
+@keyframes grain{
+  0%,100%{transform:translate(0,0)}12%{transform:translate(-2%,1%)}25%{transform:translate(1%,-2%)}
+  37%{transform:translate(-1%,2%)}50%{transform:translate(2%,1%)}62%{transform:translate(-2%,-1%)}
+  75%{transform:translate(1%,2%)}87%{transform:translate(2%,-2%)}
+}
+.wrap{max-width:1020px;margin:0 auto;padding:0 22px;position:relative;z-index:2}
 a{color:inherit;text-decoration:none}
 button{font-family:var(--f-ui);cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
-.wrap{max-width:1020px;margin:0 auto;padding:0 22px}
+:focus-visible{outline:2px solid var(--time);outline-offset:3px;border-radius:4px}
+::selection{background:rgba(232,176,75,.25)}
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
   padding:13px 22px;border-radius:10px;font-weight:600;font-size:15.5px;
-  border:1px solid var(--line2);background:var(--panel2);transition:background .15s,transform .12s;
+  border:1px solid var(--line2);background:var(--panel2);transition:background .15s,transform .12s,box-shadow .2s;
 }
 .btn:hover{background:var(--card);transform:translateY(-1px)}
-.btn.gold{background:var(--time);border-color:var(--time);color:#151004}
-.btn.gold:hover{background:#F2C065}
+.btn.gold{background:var(--time);border-color:var(--time);color:#151004;box-shadow:0 0 0 rgba(232,176,75,0)}
+.btn.gold:hover{background:#F2C065;box-shadow:0 6px 28px rgba(232,176,75,.28)}
 .eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--time)}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---- régua de timeline fixa (assinatura) ---- */
+.rail{position:fixed;top:0;left:0;right:0;z-index:80}
+.rail-track{display:flex;height:4px;background:rgba(18,21,28,.9)}
+.rseg{position:relative;overflow:hidden}
+.rseg i{position:absolute;inset:0;background:var(--c);transform:scaleX(var(--p,0));transform-origin:left;display:block}
+.rail-tc{
+  position:absolute;top:8px;right:10px;font-family:var(--f-mono);font-size:10.5px;color:var(--faint);
+  background:rgba(10,12,17,.72);border:1px solid var(--line);border-radius:6px;padding:2px 7px;
+  backdrop-filter:blur(4px);letter-spacing:.06em;
+}
+
+/* ---- cabeçalho de bloco (a página é um roteiro) ---- */
+.blockhead{display:flex;align-items:baseline;gap:10px;font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px}
+.blockhead::before{content:'';align-self:center;width:22px;height:3px;border-radius:2px;background:var(--c,var(--dev))}
+.blockhead .tc{color:var(--faint)}
+.blockhead .tag{color:var(--c,var(--dev));font-weight:600}
+.blockhead .note{color:var(--faint);letter-spacing:.1em;margin-left:auto;text-align:right}
 
 /* nav */
-nav{display:flex;align-items:center;justify-content:space-between;padding:16px 0}
+nav{display:flex;align-items:center;justify-content:space-between;padding:16px 0;position:sticky;top:4px;z-index:70}
+nav::before{content:'';position:absolute;inset:0 -22px;background:rgba(10,12,17,.82);backdrop-filter:blur(9px);border-bottom:1px solid rgba(36,43,57,.6);z-index:-1}
 .brand{font-family:var(--f-disp);font-weight:800;font-size:18px;letter-spacing:-.02em}
 .brand span{color:var(--time)}
+nav .links{display:flex;gap:22px;font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+nav .links a:hover{color:var(--ink)}
 nav .btn{padding:9px 16px;font-size:14px}
 
 /* hero */
-.hero{padding:64px 0 30px;text-align:left}
-.hero h1{font-family:var(--f-disp);font-weight:800;font-size:clamp(34px,6vw,58px);line-height:1.04;letter-spacing:-.035em;max-width:760px;margin:14px 0 18px}
+.hero{padding:72px 0 30px}
+.hero h1{
+  font-family:var(--f-disp);font-weight:800;font-size:clamp(38px,7vw,74px);
+  line-height:.99;letter-spacing:-.042em;max-width:840px;margin:16px 0 20px;
+  font-variation-settings:'opsz' 96;
+}
 .hero h1 em{font-style:normal;color:var(--time)}
-.hero p{color:var(--dim);font-size:18px;max-width:640px}
-.hero .ctas{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+.hero h1 .dim{color:var(--faint)}
+.hero p{color:var(--dim);font-size:18px;max-width:620px}
+.hero .ctas{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}
 .hero .micro{font-family:var(--f-mono);font-size:12px;color:var(--faint);margin-top:12px}
-
-/* barra narrativa (assinatura) */
-.storybar{margin:46px 0 8px}
-.storybar .bar{display:flex;height:18px;border-radius:6px;overflow:hidden;border:1px solid var(--line)}
-.storybar .bar i{display:block;height:100%;transform-origin:left;animation:grow .9s cubic-bezier(.2,.7,.2,1) both}
-.storybar .bar i:nth-child(2){animation-delay:.12s}
-.storybar .bar i:nth-child(3){animation-delay:.24s}
-.storybar .bar i:nth-child(4){animation-delay:.36s}
-.storybar .bar i:nth-child(5){animation-delay:.48s}
-@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-.storybar .legend{display:flex;justify-content:space-between;margin-top:8px;font-family:var(--f-mono);font-size:11px;color:var(--faint);flex-wrap:wrap;gap:6px}
-.storybar .legend b{font-weight:600}
 
 /* mock das 3 colunas */
 .mock{
-  margin:40px 0 0;background:var(--panel);border:1px solid var(--line);border-radius:16px;
-  overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.45);
+  margin:52px 0 0;background:var(--panel);border:1px solid var(--line);border-radius:16px;
+  overflow:hidden;box-shadow:0 40px 90px rgba(0,0,0,.5);
 }
 .mock-top{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);font-family:var(--f-mono);font-size:11px;color:var(--faint)}
 .mock-top i{width:9px;height:9px;border-radius:50%;background:var(--line2);display:block}
+.mock-top .rec{margin-left:auto;color:var(--hook);letter-spacing:.12em}
+.mock-top .rec::before{content:'●';margin-right:6px;animation:blink 1.6s steps(1) infinite}
 .mock-grid{display:grid;grid-template-columns:1.25fr 1fr .9fr;font-size:12px}
 .mcol{padding:14px;border-right:1px solid var(--line);min-width:0}
 .mcol:last-child{border-right:none}
@@ -93,17 +130,18 @@ nav .btn{padding:9px 16px;font-size:14px}
 @keyframes blink{50%{opacity:0}}
 
 /* seções */
-section{padding:74px 0 0}
-.sec-head{max-width:640px;margin-bottom:34px}
-.sec-head h2{font-family:var(--f-disp);font-weight:800;font-size:clamp(24px,3.6vw,34px);letter-spacing:-.025em;line-height:1.15;margin-top:10px}
-.sec-head p{color:var(--dim);margin-top:10px}
+section{padding:88px 0 0}
+section[id]{scroll-margin-top:70px}
+.sec-head{max-width:660px;margin-bottom:36px}
+.sec-head h2{font-family:var(--f-disp);font-weight:800;font-size:clamp(26px,4.2vw,40px);letter-spacing:-.03em;line-height:1.1}
+.sec-head p{color:var(--dim);margin-top:12px}
 
-/* dor */
-.dores{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
-.dor{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px}
-.dor .n{font-family:var(--f-mono);font-size:11px;color:var(--faint)}
-.dor p{margin-top:8px;font-size:15px;color:var(--dim)}
-.dor p b{color:var(--ink);font-weight:600}
+/* dor — fragmentos narrados */
+.frags{display:flex;flex-direction:column;gap:26px;max-width:720px}
+.frag{border-left:3px solid var(--ctx);padding-left:20px}
+.frag .n{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+.frag p{font-family:var(--f-script);font-style:italic;font-size:clamp(17px,2.4vw,21px);line-height:1.6;color:var(--dim);margin-top:6px}
+.frag p b{color:var(--ink);font-weight:600;font-style:normal;font-family:var(--f-ui);font-size:.9em}
 
 /* como funciona */
 .passos{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
@@ -112,23 +150,25 @@ section{padding:74px 0 0}
 .passo p{color:var(--dim);font-size:14.5px;margin-top:8px}
 .passo .k{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;display:block}
 
-/* features */
-.feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
-.feat{display:flex;gap:11px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px 16px;align-items:flex-start}
-.feat i{width:8px;height:8px;border-radius:50%;background:var(--time);flex-shrink:0;margin-top:7px}
+/* features — checklist sem caixas */
+.feats{display:grid;grid-template-columns:1fr 1fr;gap:4px 40px;max-width:860px}
+.feat{display:flex;gap:12px;padding:13px 0;border-bottom:1px dashed var(--line);align-items:flex-start}
+.feat i{font-family:var(--f-mono);font-style:normal;color:var(--time);font-size:13px;line-height:1.7;flex-shrink:0}
 .feat p{font-size:14.5px;color:var(--dim)}
 .feat p b{color:var(--ink);font-weight:600}
 
 /* preço */
 #preco .card{
   background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line2);
-  border-radius:20px;padding:34px 30px;max-width:520px;margin:0 auto;text-align:center;
+  border-radius:20px;padding:36px 30px;max-width:520px;margin:0 auto;text-align:center;
+  position:relative;box-shadow:0 0 90px rgba(167,139,250,.12),0 30px 80px rgba(0,0,0,.45);
 }
+#preco .card::before{content:'';position:absolute;top:0;left:24px;right:24px;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,var(--climax),transparent)}
 #preco .selo{display:inline-block;font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--time);background:var(--time-dim);border-radius:99px;padding:6px 14px}
-#preco .valores{margin:18px 0 6px;display:flex;align-items:baseline;justify-content:center;gap:12px}
+#preco .valores{margin:18px 0 6px;display:flex;align-items:baseline;justify-content:center;gap:14px}
 #preco .antes{color:var(--faint);text-decoration:line-through;font-size:20px;font-family:var(--f-mono)}
-#preco .agora{font-family:var(--f-disp);font-weight:800;font-size:56px;letter-spacing:-.03em;line-height:1}
-#preco .agora small{font-size:22px;font-weight:700;vertical-align:18px;margin-right:2px}
+#preco .agora{font-family:var(--f-disp);font-weight:800;font-size:clamp(56px,9vw,72px);letter-spacing:-.035em;line-height:1}
+#preco .agora small{font-size:24px;font-weight:700;vertical-align:26px;margin-right:2px}
 #preco .sub{color:var(--dim);font-size:14px}
 #preco ul{list-style:none;text-align:left;margin:22px auto 26px;max-width:360px}
 #preco li{padding:7px 0;color:var(--dim);font-size:14.5px;border-bottom:1px dashed var(--line)}
@@ -145,13 +185,25 @@ section{padding:74px 0 0}
 .faq details[open] summary::after{content:'–'}
 .faq .a{padding:0 18px 16px;color:var(--dim);font-size:14.5px}
 
+/* cta final */
+#final{text-align:center;padding-bottom:10px}
+#final .blockhead{justify-content:center}
+#final h2{
+  font-family:var(--f-disp);font-weight:800;font-size:clamp(30px,5.4vw,52px);
+  letter-spacing:-.035em;line-height:1.04;max-width:760px;margin:0 auto;
+}
+#final h2 em{font-style:normal;color:var(--cta)}
+#final .sub{color:var(--dim);margin:16px auto 0;max-width:520px}
+#final .ctas{display:flex;gap:12px;justify-content:center;margin-top:28px;flex-wrap:wrap}
+
 /* footer */
-footer{margin-top:80px;border-top:1px solid var(--line);padding:26px 0 40px;text-align:center;color:var(--faint);font-size:13px;font-family:var(--f-mono)}
+footer{margin-top:84px;border-top:1px solid var(--line);padding:26px 0 40px;text-align:center;color:var(--faint);font-size:13px;font-family:var(--f-mono)}
+footer a{color:var(--time)}
 
 /* modal pix */
-.overlay{position:fixed;inset:0;background:rgba(7,8,11,.85);backdrop-filter:blur(6px);z-index:90;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay{position:fixed;inset:0;background:rgba(7,8,11,.93);z-index:90;display:none;align-items:center;justify-content:center;padding:20px}
 .overlay.open{display:flex}
-.modal{background:var(--panel);border:1px solid var(--line2);border-radius:16px;width:100%;max-width:430px;padding:26px;box-shadow:0 30px 80px rgba(0,0,0,.6);position:relative}
+.modal{background:var(--panel);border:1px solid var(--line2);border-radius:16px;width:100%;max-width:430px;padding:26px;box-shadow:0 30px 80px rgba(0,0,0,.6);position:relative;max-height:92vh;overflow-y:auto}
 .modal h3{font-family:var(--f-disp);font-weight:800;font-size:22px;letter-spacing:-.02em}
 .modal .close{position:absolute;top:12px;right:14px;color:var(--faint);font-size:18px;padding:4px 8px}
 .modal .close:hover{color:var(--ink)}
@@ -170,26 +222,58 @@ footer{margin-top:80px;border-top:1px solid var(--line);padding:26px 0 40px;text
 #toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--panel2);border:1px solid var(--line2);padding:10px 18px;border-radius:10px;font-size:13.5px;z-index:120;opacity:0;pointer-events:none;transition:opacity .2s}
 #toast.show{opacity:1}
 
+/* reveals (só com JS ativo) */
+.js .reveal{opacity:0;transform:translateY(16px);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.7,.2,1)}
+.js .reveal.in{opacity:1;transform:none}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .js .reveal{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
 @media (max-width:760px){
   .mock-grid{grid-template-columns:1fr}
   .mcol{border-right:none;border-bottom:1px solid var(--line)}
   .mcol:nth-child(3){display:none}
-  .hero{padding-top:40px}
-  section{padding-top:56px}
+  .hero{padding-top:44px}
+  section{padding-top:64px}
+  .feats{grid-template-columns:1fr}
+  nav .links{display:none}
+  .rail-tc{display:none}
+  .blockhead .note{display:none}
 }
 </style>
 </head>
 <body>
 
+<div class="rail" aria-hidden="true">
+  <div class="rail-track">
+    <span class="rseg" style="flex:9;--c:var(--hook)"><i></i></span>
+    <span class="rseg" style="flex:16;--c:var(--ctx)"><i></i></span>
+    <span class="rseg" style="flex:38;--c:var(--dev)"><i></i></span>
+    <span class="rseg" style="flex:22;--c:var(--climax)"><i></i></span>
+    <span class="rseg" style="flex:11;--c:var(--cta)"><i></i></span>
+  </div>
+  <span class="rail-tc" id="railTc">00:00</span>
+</div>
+<div class="grain" aria-hidden="true"></div>
+
 <div class="wrap">
 <nav>
   <div class="brand">Story<span>Forge</span></div>
-  <a class="btn" id="navDemo" href="#" >Testar a demonstração</a>
+  <div class="links">
+    <a href="#como">Como funciona</a>
+    <a href="#preco">Preço</a>
+  </div>
+  <a class="btn" id="navDemo" href="#">Testar a demonstração</a>
 </nav>
 
-<header class="hero">
-  <span class="eyebrow">Para canais de terror · mistério · crime · história</span>
-  <h1>Seu vídeo nasce em <em>14 abas abertas</em>. Deveria nascer em uma.</h1>
+<header class="hero" id="b-hero">
+  <div class="blockhead" style="--c:var(--hook)">
+    <span class="tc">00:00</span><span class="tag" style="color:var(--hook)">Gancho</span>
+    <span class="note">para canais de terror · mistério · crime · história</span>
+  </div>
+  <h1>Seu vídeo nasce em <em>14 abas abertas</em>.<br>Deveria nascer em uma.</h1>
   <p>O StoryForge junta roteiro, referências e timing na mesma tela: você escreve em blocos, solta links, fotos de época e coordenadas em cada trecho — e vê o minuto exato em que cada imagem entra na edição.</p>
   <div class="ctas">
     <a class="btn gold" href="#preco">Quero minha chave — <span data-preco>R$47</span></a>
@@ -197,31 +281,14 @@ footer{margin-top:80px;border-top:1px solid var(--line);padding:26px 0 40px;text
   </div>
   <div class="micro">Licença vitalícia · pagamento por Pix · seus dados ficam com você</div>
 
-  <div class="storybar" aria-hidden="true">
-    <div class="bar">
-      <i style="flex:9;background:var(--hook)"></i>
-      <i style="flex:16;background:var(--ctx)"></i>
-      <i style="flex:38;background:var(--dev)"></i>
-      <i style="flex:22;background:var(--climax)"></i>
-      <i style="flex:11;background:var(--cta)"></i>
-    </div>
-    <div class="legend">
-      <span><b style="color:var(--hook)">00:00</b> gancho</span>
-      <span><b style="color:var(--ctx)">00:09</b> contexto</span>
-      <span><b style="color:var(--dev)">00:25</b> desenvolvimento</span>
-      <span><b style="color:var(--climax)">01:03</b> clímax</span>
-      <span><b style="color:var(--cta)">01:25</b> cta</span>
-    </div>
-  </div>
-
-  <div class="mock" aria-hidden="true">
-    <div class="mock-top"><i></i><i></i><i></i>&nbsp;&nbsp;storyforge · o farol que engoliu três homens</div>
+  <div class="mock reveal" aria-hidden="true">
+    <div class="mock-top"><i></i><i></i><i></i>&nbsp;&nbsp;storyforge · o farol que engoliu três homens<span class="rec">rec</span></div>
     <div class="mock-grid">
       <div class="mcol">
         <div class="mh">Roteiro</div>
         <div class="mblock" style="border-left-color:var(--hook)">
           <div class="mt" style="color:var(--hook)">Gancho</div>
-          <div class="mx">Dezembro de 1900. Três faroleiros desaparecem de uma ilha isolada na Escócia. A porta trancada por dentro.<span class="mock-cursor"></span></div>
+          <div class="mx"><span id="typeTarget">Dezembro de 1900. Três faroleiros desaparecem de uma ilha isolada na Escócia. A porta trancada por dentro.</span><span class="mock-cursor"></span></div>
           <div class="mf">27 palavras · <b>00:11</b></div>
         </div>
         <div class="mblock" style="border-left-color:var(--ctx)">
@@ -248,51 +315,59 @@ footer{margin-top:80px;border-top:1px solid var(--line);padding:26px 0 40px;text
   </div>
 </header>
 
-<section id="dor">
-  <div class="sec-head">
-    <span class="eyebrow">A dor</span>
+<section id="dor" class="b-block" data-seg="1">
+  <div class="blockhead" style="--c:var(--ctx)">
+    <span class="tc">00:09</span><span class="tag" style="color:var(--ctx)">Contexto</span>
+  </div>
+  <div class="sec-head reveal">
     <h2>Contar uma boa história não devia ser um problema de logística.</h2>
   </div>
-  <div class="dores">
-    <div class="dor"><div class="n">O sintoma</div><p><b>Dezenas de abas</b>, uma pasta de downloads caótica e um bloco de notas que só você entende — por vídeo.</p></div>
-    <div class="dor"><div class="n">O custo invisível</div><p>Horas de pesquisa se perdem porque <b>nada aponta para o trecho certo do roteiro</b> na hora de editar.</p></div>
-    <div class="dor"><div class="n">A pergunta eterna</div><p>"Quantos minutos dá esse texto?" — e você <b>descobre só depois de gravar</b>, quando já é tarde.</p></div>
+  <div class="frags">
+    <div class="frag reveal"><div class="n">O sintoma</div><p><b>Dezenas de abas</b>, uma pasta de downloads caótica e um bloco de notas que só você entende — por vídeo.</p></div>
+    <div class="frag reveal"><div class="n">O custo invisível</div><p>Horas de pesquisa se perdem porque <b>nada aponta para o trecho certo do roteiro</b> na hora de editar.</p></div>
+    <div class="frag reveal"><div class="n">A pergunta eterna</div><p>"Quantos minutos dá esse texto?" — e você <b>descobre só depois de gravar</b>, quando já é tarde.</p></div>
   </div>
 </section>
 
-<section id="como">
-  <div class="sec-head">
-    <span class="eyebrow">Como funciona</span>
+<section id="como" class="b-block" data-seg="2">
+  <div class="blockhead" style="--c:var(--dev)">
+    <span class="tc">00:25</span><span class="tag" style="color:var(--dev)">Desenvolvimento</span>
+  </div>
+  <div class="sec-head reveal">
     <h2>Três colunas. Uma história.</h2>
   </div>
   <div class="passos">
-    <div class="passo" style="border-top-color:var(--hook)"><span class="k" style="color:var(--hook)">1 · Escreva</span><h3>Roteiro em blocos</h3><p>Gancho, contexto, desenvolvimento, clímax e CTA — cada bloco com sua cor, contagem de palavras e tempo de fala.</p></div>
-    <div class="passo" style="border-top-color:var(--ctx)"><span class="k" style="color:var(--ctx)">2 · Ancore</span><h3>Referência no trecho certo</h3><p>Links, fotos de época (cole com Ctrl+V), notas de b-roll e coordenadas com atalho direto pro Google Maps — presas ao bloco que vão ilustrar.</p></div>
-    <div class="passo" style="border-top-color:var(--time)"><span class="k" style="color:var(--time)">3 · Grave</span><h3>Timing e teleprompter</h3><p>O tempo total se recalcula enquanto você digita, avisos de retenção apontam problemas, e o teleprompter rola na velocidade exata da sua narração.</p></div>
+    <div class="passo reveal" style="border-top-color:var(--hook)"><span class="k" style="color:var(--hook)">1 · Escreva</span><h3>Roteiro em blocos</h3><p>Gancho, contexto, desenvolvimento, clímax e CTA — cada bloco com sua cor, contagem de palavras e tempo de fala.</p></div>
+    <div class="passo reveal" style="border-top-color:var(--ctx)"><span class="k" style="color:var(--ctx)">2 · Ancore</span><h3>Referência no trecho certo</h3><p>Links, fotos de época (cole com Ctrl+V), notas de b-roll e coordenadas com atalho direto pro Google Maps — presas ao bloco que vão ilustrar.</p></div>
+    <div class="passo reveal" style="border-top-color:var(--time)"><span class="k" style="color:var(--time)">3 · Grave</span><h3>Timing e teleprompter</h3><p>O tempo total se recalcula enquanto você digita, avisos de retenção apontam problemas, e o teleprompter rola na velocidade exata da sua narração.</p></div>
   </div>
 </section>
 
-<section id="feats">
-  <div class="sec-head">
-    <span class="eyebrow">O que vem dentro</span>
+<section id="feats" class="b-block" data-seg="2">
+  <div class="blockhead" style="--c:var(--dev)">
+    <span class="tc">00:47</span><span class="tag" style="color:var(--dev)">Desenvolvimento</span>
+  </div>
+  <div class="sec-head reveal">
     <h2>Feito para quem trata o canal como negócio.</h2>
   </div>
   <div class="feats">
-    <div class="feat"><i></i><p><b>Cálculo de fala ajustável</b> — de 110 a 190 palavras/min, no seu ritmo de narração.</p></div>
-    <div class="feat"><i></i><p><b>Alvo por formato</b> — 60s, 90s, 3, 5, 8, 10 min ou personalizado, com barra de progresso.</p></div>
-    <div class="feat"><i></i><p><b>Avisos de retenção</b> — gancho longo demais, bloco sem mídia, roteiro estourando o alvo.</p></div>
-    <div class="feat"><i></i><p><b>Shot list .csv</b> — timestamp, bloco e link de cada mídia, pronta pra mandar pro editor.</p></div>
-    <div class="feat"><i></i><p><b>Roteiro .md com timestamps</b> — e backup .json do projeto inteiro.</p></div>
-    <div class="feat"><i></i><p><b>Seus dados são seus</b> — tudo fica no seu navegador. Sem conta, sem nuvem, sem mensalidade.</p></div>
+    <div class="feat reveal"><i>▸</i><p><b>Cálculo de fala ajustável</b> — de 110 a 190 palavras/min, no seu ritmo de narração.</p></div>
+    <div class="feat reveal"><i>▸</i><p><b>Alvo por formato</b> — 60s, 90s, 3, 5, 8, 10 min ou personalizado, com barra de progresso.</p></div>
+    <div class="feat reveal"><i>▸</i><p><b>Avisos de retenção</b> — gancho longo demais, bloco sem mídia, roteiro estourando o alvo.</p></div>
+    <div class="feat reveal"><i>▸</i><p><b>Shot list .csv</b> — timestamp, bloco e link de cada mídia, pronta pra mandar pro editor.</p></div>
+    <div class="feat reveal"><i>▸</i><p><b>Roteiro .md com timestamps</b> — e backup .json do projeto inteiro.</p></div>
+    <div class="feat reveal"><i>▸</i><p><b>Seus dados são seus</b> — tudo fica no seu navegador. Sem conta, sem nuvem, sem mensalidade.</p></div>
   </div>
 </section>
 
-<section id="preco">
-  <div class="sec-head" style="text-align:center;margin-left:auto;margin-right:auto">
-    <span class="eyebrow">Preço</span>
+<section id="preco" class="b-block" data-seg="3">
+  <div class="blockhead" style="--c:var(--climax)">
+    <span class="tc">01:03</span><span class="tag" style="color:var(--climax)">Clímax</span>
+  </div>
+  <div class="sec-head reveal" style="text-align:center;margin-left:auto;margin-right:auto">
     <h2>Uma tarde de pesquisa organizada já paga a ferramenta.</h2>
   </div>
-  <div class="card">
+  <div class="card reveal">
     <span class="selo">Preço de fundador · primeiros 20</span>
     <div class="valores"><span class="antes">R$97</span><span class="agora"><small>R$</small><span data-preco-num>47</span></span></div>
     <div class="sub">pagamento único · licença vitalícia</div>
@@ -303,16 +378,18 @@ footer{margin-top:80px;border-top:1px solid var(--line);padding:26px 0 40px;text
       <li><b>Chave em minutos</b> após a confirmação do Pix</li>
     </ul>
     <div class="ctas">
-      <button class="btn gold" id="btnPix">Pagar com Pix copia e cola</button>
+      <button class="btn gold" id="btnPix">Pagar com Pix</button>
       <a class="btn" id="btnZap" href="#" target="_blank" rel="noopener">Prefiro fechar pelo WhatsApp</a>
     </div>
     <div class="fine">Sem plataforma no meio: o Pix cai direto, a chave sai na hora.<br>Garantia simples: não curtiu em 7 dias, devolvo o Pix.</div>
   </div>
 </section>
 
-<section class="faq" id="faq">
-  <div class="sec-head">
-    <span class="eyebrow">Perguntas diretas</span>
+<section class="faq b-block" id="faq" data-seg="3">
+  <div class="blockhead" style="--c:var(--climax)">
+    <span class="tc">01:14</span><span class="tag" style="color:var(--climax)">Clímax</span><span class="note">objeções honestas</span>
+  </div>
+  <div class="sec-head reveal">
     <h2>O que você precisa saber antes de pagar.</h2>
   </div>
   <details><summary>Tem mensalidade?</summary><div class="a">Não. Pagamento único, licença vitalícia. Não existe servidor cobrando de mim todo mês, então não existe assinatura cobrando de você.</div></details>
@@ -323,8 +400,20 @@ footer{margin-top:80px;border-top:1px solid var(--line);padding:26px 0 40px;text
   <details><summary>Posso testar antes?</summary><div class="a">Sim, e sem cadastro: a demonstração é o app de verdade com um caso real carregado. Só não salva nem exporta.</div></details>
 </section>
 
+<section id="final" class="b-block" data-seg="4">
+  <div class="blockhead" style="--c:var(--cta)">
+    <span class="tc">01:25</span><span class="tag" style="color:var(--cta)">CTA</span>
+  </div>
+  <h2 class="reveal">A demonstração está aberta.<br><em>E dessa vez a porta não está trancada.</em></h2>
+  <p class="sub reveal">O app de verdade, com o caso do farol já carregado. Sem cadastro, sem cartão — entre e escreva.</p>
+  <div class="ctas reveal">
+    <a class="btn gold" href="#" id="btnPixFinal">Quero minha chave — <span data-preco>R$47</span></a>
+    <a class="btn" id="finalDemo" href="#">Abrir a demonstração</a>
+  </div>
+</section>
+
 <footer>
-  StoryForge · feito por um dev independente no Brasil · <a href="#" id="footDemo" style="color:var(--time)">abrir demonstração</a>
+  StoryForge · feito por um dev independente no Brasil · <a href="#" id="footDemo">abrir demonstração</a>
 </footer>
 </div>
 
@@ -366,6 +455,8 @@ const CONFIG={
 /* ====================================================================== */
 
 const $=s=>document.querySelector(s);
+document.documentElement.classList.add('js');
+const motionOK=!window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('show'),2600)}
 
 /* ---------- Pix copia e cola (padrão EMV do Banco Central) ---------- */
@@ -380,7 +471,7 @@ function crc16(str){
   return crc.toString(16).toUpperCase().padStart(4,'0');
 }
 function emv(id,val){val=String(val);return id+String(val.length).padStart(2,'0')+val}
-function limpar(s,max){return String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9 ]/g,' ').replace(/\s+/g,' ').trim().toUpperCase().slice(0,max)}
+function limpar(s,max){return String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^A-Za-z0-9 ]/g,' ').replace(/\s+/g,' ').trim().toUpperCase().slice(0,max)}
 function pixPayload(chave,nome,cidade,valor,txid){
   let p='000201';
   p+=emv('01','11'); // QR estático reutilizável
@@ -415,7 +506,7 @@ const MSG_PAGO='Oi! Acabei de fazer o Pix do StoryForge (R$'+CONFIG.PRECO+'). Se
 function init(){
   document.querySelectorAll('[data-preco]').forEach(el=>el.textContent='R$'+CONFIG.PRECO);
   document.querySelectorAll('[data-preco-num]').forEach(el=>el.textContent=String(CONFIG.PRECO));
-  ['navDemo','heroDemo','footDemo'].forEach(id=>{const a=document.getElementById(id);if(a)a.href=CONFIG.LINK_APP});
+  ['navDemo','heroDemo','finalDemo','footDemo'].forEach(id=>{const a=document.getElementById(id);if(a)a.href=CONFIG.LINK_APP});
   const zap=$('#btnZap'),pixZap=$('#pixZap');
   if(CONFIG.WHATSAPP){
     zap.href=waLink(MSG_COMPRA);
@@ -426,7 +517,7 @@ function init(){
 }
 
 /* ---------- Modal Pix ---------- */
-$('#btnPix').addEventListener('click',()=>{
+function abrirPix(){
   if(!CONFIG.PIX_CHAVE){
     if(CONFIG.WHATSAPP){window.open(waLink(MSG_COMPRA),'_blank')}
     else toast('Configure sua chave Pix no topo do arquivo vende.html');
@@ -436,7 +527,9 @@ $('#btnPix').addEventListener('click',()=>{
   $('#pixCode').textContent=payload;
   renderPixQr(payload);
   $('#pixModal').classList.add('open');
-});
+}
+$('#btnPix').addEventListener('click',abrirPix);
+$('#btnPixFinal').addEventListener('click',e=>{e.preventDefault();abrirPix()});
 $('#pixClose').addEventListener('click',()=>$('#pixModal').classList.remove('open'));
 $('#pixModal').addEventListener('click',e=>{if(e.target.id==='pixModal')$('#pixModal').classList.remove('open')});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#pixModal').classList.remove('open')});
@@ -447,8 +540,67 @@ $('#pixCopy').addEventListener('click',()=>{
   function fb(){const t=document.createElement('textarea');t.value=code;document.body.appendChild(t);t.select();try{document.execCommand('copy');done()}catch(e){toast('Selecione o código e copie manualmente')}t.remove()}
 });
 
-init();
+/* ---------- A página é um roteiro: régua de timeline + timecode ---------- */
+const DUR=96; // “duração” da página em segundos (01:36)
+const railSegs=[...document.querySelectorAll('.rseg i')];
+const railTc=$('#railTc');
+let segRanges=[];
+function medirBlocos(){
+  const grupos={};
+  const add=(el,seg)=>{
+    if(!el)return;
+    const top=el.offsetTop,bot=top+el.offsetHeight;
+    if(!grupos[seg])grupos[seg]={start:top,end:bot};
+    else{grupos[seg].start=Math.min(grupos[seg].start,top);grupos[seg].end=Math.max(grupos[seg].end,bot)}
+  };
+  add(document.getElementById('b-hero'),0);
+  document.querySelectorAll('.b-block').forEach(el=>add(el,+el.dataset.seg));
+  segRanges=[0,1,2,3,4].map(i=>grupos[i]||{start:0,end:1});
+}
+let railTick=false;
+function railUpdate(){
+  railTick=false;
+  const vh=innerHeight,play=scrollY+vh*.5;
+  segRanges.forEach((r,i)=>{
+    const p=Math.max(0,Math.min(1,(play-r.start)/(r.end-r.start)));
+    if(railSegs[i])railSegs[i].style.setProperty('--p',p.toFixed(3));
+  });
+  if(railTc){
+    const doc=document.documentElement.scrollHeight-vh;
+    const t=Math.round(Math.max(0,Math.min(1,doc>0?scrollY/doc:0))*DUR);
+    railTc.textContent=String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0');
+  }
+}
+function railQueue(){if(!railTick){railTick=true;requestAnimationFrame(railUpdate)}}
+addEventListener('scroll',railQueue,{passive:true});
+addEventListener('resize',()=>{medirBlocos();railQueue()});
+addEventListener('load',()=>{medirBlocos();railQueue()});
+medirBlocos();railUpdate();
 
+/* ---------- Reveals ---------- */
+if('IntersectionObserver' in window && motionOK){
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+  },{rootMargin:'0px 0px -8% 0px',threshold:.08});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+}else{
+  document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
+}
+
+/* ---------- Abertura fria: o mock digita o gancho ---------- */
+(function(){
+  const el=document.getElementById('typeTarget');
+  if(!el||!motionOK||innerWidth<761)return;
+  const full=el.textContent;
+  el.textContent='';
+  let i=0;
+  setTimeout(function tick(){
+    el.textContent=full.slice(0,++i);
+    if(i<full.length)setTimeout(tick,26);
+  },700);
+})();
+
+init();
 </script>
 </body>
 </html>
