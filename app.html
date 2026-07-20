@@ -528,6 +528,20 @@ function sfHash(str){
   return hx.slice(0,4)+'-'+hx.slice(4,8)+'-'+hx.slice(8,12);
 }
 function gerarChave(email){return sfHash(String(email).trim().toLowerCase()+'|'+SF_SECRET)}
+/* Chave com validade: XXXX-XXXX-XXXX-AAMM (vale até o fim do mês AAMM).
+   Chave antiga de 3 grupos continua vitalícia. */
+function validarLic(email,key){
+  key=String(key||'').trim().toUpperCase();
+  const m=key.match(/^([0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4})-(\d{4})$/);
+  if(m){
+    const esperado=sfHash(String(email).trim().toLowerCase()+'|'+m[2]+'|'+SF_SECRET);
+    if(esperado!==m[1])return 'invalida';
+    const ano=2000+parseInt(m[2].slice(0,2),10),mes=parseInt(m[2].slice(2),10);
+    if(!(mes>=1&&mes<=12))return 'invalida';
+    return (new Date()<new Date(ano,mes,1))?'ok':'expirada';
+  }
+  return gerarChave(email)===key?'ok':'invalida';
+}
 /*SF_HASH_END*/
 
 /* ================= ARMAZENAMENTO ================= */
@@ -910,7 +924,7 @@ function checkLic(){
   if(!canPersist)return false;
   try{
     const l=JSON.parse(localStorage.getItem('sf_lic')||'null');
-    return !!(l&&l.email&&gerarChave(l.email)===String(l.key||'').trim().toUpperCase());
+    return !!(l&&l.email&&validarLic(l.email,l.key)==='ok');
   }catch(e){return false}
 }
 function startDemo(showBanner){
@@ -937,7 +951,8 @@ $('#btnAtivar').addEventListener('click',()=>{
   const k=$('#licKey').value.trim().toUpperCase();
   const err=$('#licErr');
   if(!em||!k){err.style.display='block';err.textContent='Preencha e-mail e chave.';return}
-  if(gerarChave(em)===k){
+  const st=validarLic(em,k);
+  if(st==='ok'){
     localStorage.setItem('sf_lic',JSON.stringify({email:em,key:k,at:Date.now()}));
     $('#activation').classList.remove('open');
     demoMode=false;
@@ -945,6 +960,9 @@ $('#btnAtivar').addEventListener('click',()=>{
     document.body.classList.remove('has-banner');
     toast('Licença ativada. Bom trabalho.');
     renderHome();
+  }else if(st==='expirada'){
+    err.style.display='block';
+    err.textContent='Essa chave venceu. Renove sua assinatura e me chame no WhatsApp que te envio a nova na hora.';
   }else{
     err.style.display='block';
     err.textContent='Chave não confere com este e-mail. Verifique os dois campos.';

@@ -18,7 +18,7 @@
 <link rel="canonical" href="https://guistawichs.github.io/storyforge/">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"SoftwareApplication","name":"StoryForge","description":"Workspace de roteiro, referências e timing para canais de terror, mistério, crime e história.","applicationCategory":"MultimediaApplication","operatingSystem":"Web","url":"https://guistawichs.github.io/storyforge/","offers":{"@type":"Offer","price":"47.00","priceCurrency":"BRL","description":"Licença vitalícia, pagamento único via Pix"}}
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"StoryForge","description":"Workspace de roteiro, referências e timing para canais de terror, mistério, crime e história.","applicationCategory":"MultimediaApplication","operatingSystem":"Web","url":"https://guistawichs.github.io/storyforge/","offers":[{"@type":"Offer","price":"14.90","priceCurrency":"BRL","description":"Assinatura mensal"},{"@type":"Offer","price":"97.00","priceCurrency":"BRL","description":"Plano anual (equivale a R$8,08/mês)"}]}
 </script>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
@@ -222,25 +222,30 @@ section[id]{scroll-margin-top:70px}
 .feat p{font-size:14.5px;color:var(--dim)}
 .feat p b{color:var(--ink);font-weight:600}
 
-/* preço */
-#preco .card{
-  background:radial-gradient(260px 260px at var(--gx) var(--gy),var(--glow-fill),transparent 58%) fixed,linear-gradient(180deg,var(--panel2),var(--panel));
-  border:1px solid var(--line2);
-  border-radius:20px;padding:36px 30px;max-width:520px;margin:0 auto;text-align:center;
-  position:relative;box-shadow:0 0 90px rgba(167,139,250,.12),0 30px 80px rgba(0,0,0,.45);
+/* preço — dois planos */
+.planos{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px;max-width:760px;margin:0 auto;align-items:stretch}
+.plano{
+  background:radial-gradient(240px 240px at var(--gx) var(--gy),var(--glow-fill),transparent 60%) fixed,linear-gradient(180deg,var(--panel2),var(--panel));
+  border:1px solid var(--line2);border-radius:20px;padding:28px 26px;text-align:center;
+  position:relative;display:flex;flex-direction:column;box-shadow:0 24px 60px rgba(0,0,0,.4);
 }
-#preco .card::before{content:'';position:absolute;top:0;left:24px;right:24px;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,var(--climax),transparent)}
+.plano.destaque{
+  border-color:rgba(229,72,77,.55);
+  box-shadow:0 0 80px rgba(229,72,77,.13),0 30px 80px rgba(0,0,0,.45);
+}
+.plano.destaque::before{content:'';position:absolute;top:0;left:24px;right:24px;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,var(--brand),transparent)}
+.p-nome{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+.plano.destaque .p-nome{color:var(--brand-hi)}
+.p-preco{font-family:var(--f-disp);font-weight:800;font-size:clamp(42px,6.5vw,54px);letter-spacing:-.03em;line-height:1;margin:10px 0 4px}
+.p-preco small{font-size:20px;font-weight:700;vertical-align:20px;margin-right:2px;color:var(--brand-hi)}
+.p-preco span{font-size:15px;font-weight:600;color:var(--faint);letter-spacing:0;font-family:var(--f-ui)}
+.p-eq{font-family:var(--f-mono);font-size:11px;color:var(--faint)}
+.plano ul{list-style:none;text-align:left;margin:18px auto;max-width:300px;flex:1}
+.plano li{padding:6px 0;color:var(--dim);font-size:13.5px;border-bottom:1px dashed var(--line)}
+.plano li:last-child{border:none}
+.plano li b{color:var(--ink);font-weight:600}
+.plano .ctas{display:flex;flex-direction:column;gap:9px;margin-top:auto}
 #preco .selo{display:inline-block;font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--brand-hi);background:var(--brand-dim);border-radius:99px;padding:6px 14px}
-#preco .valores{margin:18px 0 6px;display:flex;align-items:baseline;justify-content:center;gap:14px}
-#preco .antes{color:var(--faint);text-decoration:line-through;font-size:20px;font-family:var(--f-mono)}
-#preco .agora{font-family:var(--f-disp);font-weight:800;font-size:clamp(56px,9vw,72px);letter-spacing:-.035em;line-height:1}
-#preco .agora small{font-size:24px;font-weight:700;vertical-align:26px;margin-right:2px;color:var(--brand-hi)}
-#preco .sub{color:var(--dim);font-size:14px}
-#preco ul{list-style:none;text-align:left;margin:22px auto 26px;max-width:360px}
-#preco li{padding:7px 0;color:var(--dim);font-size:14.5px;border-bottom:1px dashed var(--line)}
-#preco li:last-child{border:none}
-#preco li b{color:var(--ink);font-weight:600}
-#preco .ctas{display:flex;flex-direction:column;gap:10px}
 #preco .fine{font-family:var(--f-mono);font-size:11px;color:var(--faint);margin-top:14px;line-height:1.6}
 
 /* faq */
@@ -342,10 +347,10 @@ footer a{color:var(--brand-hi)}
   <h1>Seu vídeo nasce em <em>14 abas abertas</em>.<br>Deveria nascer em uma.</h1>
   <p>O StoryForge junta roteiro, referências e timing na mesma tela: você escreve em blocos, solta links, fotos de época e coordenadas em cada trecho — e vê o minuto exato em que cada imagem entra na edição.</p>
   <div class="ctas">
-    <a class="btn gold" href="#preco">Quero minha chave — <span data-preco>R$47</span></a>
+    <a class="btn gold" href="#preco">Assinar — a partir de R$14,90/mês</a>
     <a class="btn" id="heroDemo" href="#">Testar grátis, sem cadastro</a>
   </div>
-  <div class="micro">Licença vitalícia · pagamento por Pix · seus dados ficam com você</div>
+  <div class="micro">Cancele quando quiser · 7 dias de garantia · seus dados ficam com você</div>
 
   <div class="mock reveal" aria-hidden="true">
     <div class="mock-top"><i></i><i></i><i></i>&nbsp;&nbsp;storyforge · o farol que engoliu três homens<span class="rec">rec</span></div>
@@ -431,24 +436,41 @@ footer a{color:var(--brand-hi)}
     <span class="tc">01:03</span><span class="tag" style="color:var(--climax)">Clímax</span>
   </div>
   <div class="sec-head reveal" style="text-align:center;margin-left:auto;margin-right:auto">
-    <h2>Uma tarde de pesquisa organizada já paga a ferramenta.</h2>
+    <h2>Um mês custa menos que um lanche. Um ano, menos que uma pizza por semestre.</h2>
   </div>
-  <div class="card reveal glow">
-    <span class="selo">Preço de fundador · primeiros 20</span>
-    <div class="valores"><span class="antes">R$97</span><span class="agora"><small>R$</small><span data-preco-num>47</span></span></div>
-    <div class="sub">pagamento único · licença vitalícia</div>
-    <ul>
-      <li><b>App completo</b> — roteiro, mídia, timing e teleprompter</li>
-      <li><b>Todas as atualizações da v1</b> incluídas</li>
-      <li><b>Suporte direto no WhatsApp</b> com quem construiu</li>
-      <li><b>Chave em minutos</b> após a confirmação do Pix</li>
-    </ul>
-    <div class="ctas">
-      <button class="btn gold" id="btnPix">Pagar com Pix</button>
-      <a class="btn" id="btnZap" href="#" target="_blank" rel="noopener">Prefiro fechar pelo WhatsApp</a>
+  <div class="planos">
+    <div class="plano reveal glow">
+      <span class="p-nome">Mensal</span>
+      <div class="p-preco"><small>R$</small>14,90<span>/mês</span></div>
+      <div class="p-eq">renovação automática · cancele em 1 clique</div>
+      <ul>
+        <li><b>App completo</b> — roteiro, mídia, timing e teleprompter</li>
+        <li><b>Atualizações</b> incluídas enquanto assinar</li>
+        <li><b>Suporte direto no WhatsApp</b> com quem construiu</li>
+        <li><b>Cartão ou Pix automático</b> pela Kiwify</li>
+      </ul>
+      <div class="ctas">
+        <a class="btn" id="btnKiwifyMensal" href="#" target="_blank" rel="noopener">Assinar o mensal</a>
+      </div>
     </div>
-    <div class="fine">Sem plataforma no meio: o Pix cai direto, a chave sai na hora.<br>Garantia simples: não curtiu em 7 dias, devolvo o Pix.</div>
+    <div class="plano destaque reveal glow">
+      <span class="selo">Melhor valor · economize 46%</span>
+      <span class="p-nome">Anual</span>
+      <div class="p-preco"><small>R$</small>97<span>/ano</span></div>
+      <div class="p-eq">equivale a R$8,08/mês · chave de 12 meses</div>
+      <ul>
+        <li><b>Tudo do plano mensal</b>, por menos da metade</li>
+        <li><b>No Pix à vista</b>: cai direto, chave em minutos</li>
+        <li><b>Ou em até 12x</b> no cartão pela Kiwify</li>
+        <li><b>Sem surpresa</b>: renova só 1x por ano</li>
+      </ul>
+      <div class="ctas">
+        <button class="btn gold" id="btnPix">Pagar R$97 no Pix</button>
+        <a class="btn" id="btnKiwifyAnual" href="#" target="_blank" rel="noopener">ou em até 12x no cartão</a>
+      </div>
+    </div>
   </div>
+  <div class="fine" style="text-align:center;margin-top:18px">Garantia de 7 dias nos dois planos: não curtiu, devolvo tudo.<br><a id="btnZap" href="#" target="_blank" rel="noopener" style="color:var(--brand-hi)">Quer tirar uma dúvida antes? Me chama no WhatsApp</a></div>
 </section>
 
 <section class="faq b-block" id="faq" data-seg="3">
@@ -458,11 +480,12 @@ footer a{color:var(--brand-hi)}
   <div class="sec-head reveal">
     <h2>O que você precisa saber antes de pagar.</h2>
   </div>
-  <details><summary>Tem mensalidade?</summary><div class="a">Não. Pagamento único, licença vitalícia. Não existe servidor cobrando de mim todo mês, então não existe assinatura cobrando de você.</div></details>
+  <details><summary>Como funciona a cobrança?</summary><div class="a">Assinatura: R$14,90/mês (cartão ou Pix automático, pela Kiwify) ou R$97/ano — no Pix à vista direto comigo, ou em até 12x no cartão. A mensal renova sozinha até você cancelar; a anual renova uma vez por ano.</div></details>
+  <details><summary>Como cancelo?</summary><div class="a">Em 1 clique, pelo link que vem no e-mail da fatura da Kiwify — sem precisar falar com ninguém. Seu acesso vale até o fim do período já pago, e seus projetos continuam no seu navegador para sempre (dá pra exportar tudo em .json).</div></details>
   <details><summary>Onde ficam meus roteiros e imagens?</summary><div class="a">No seu navegador, no seu computador. Nada sobe pra nuvem. Por isso existe o botão de backup (.json) — exporte de tempos em tempos e guarde onde quiser.</div></details>
   <details><summary>Funciona no celular?</summary><div class="a">Funciona (as três colunas viram abas), mas a ferramenta brilha mesmo no desktop, onde você produz.</div></details>
   <details><summary>E se eu trocar de computador ou limpar o navegador?</summary><div class="a">Importa o backup .json e ativa com a mesma chave. Sua chave é sua — vale em quantos navegadores você usar.</div></details>
-  <details><summary>Como recebo o acesso?</summary><div class="a">Depois do Pix, você me manda o comprovante e o seu e-mail no WhatsApp. Eu gero sua chave na hora e te mando o link — normalmente em poucos minutos.</div></details>
+  <details><summary>Como recebo o acesso?</summary><div class="a">Depois do pagamento (Kiwify ou Pix), você me manda o comprovante e o seu e-mail no WhatsApp. Eu gero sua chave de ativação na hora e te mando com o link do app — normalmente em poucos minutos.</div></details>
   <details><summary>Posso testar antes?</summary><div class="a">Sim, e sem cadastro: a demonstração é o app de verdade com um caso real carregado. Só não salva nem exporta.</div></details>
 </section>
 
@@ -473,7 +496,7 @@ footer a{color:var(--brand-hi)}
   <h2 class="reveal">A demonstração está aberta.<br><em>E dessa vez a porta não está trancada.</em></h2>
   <p class="sub reveal">O app de verdade, com o caso do farol já carregado. Sem cadastro, sem cartão — entre e escreva.</p>
   <div class="ctas reveal">
-    <a class="btn gold" href="#" id="btnPixFinal">Quero minha chave — <span data-preco>R$47</span></a>
+    <a class="btn gold" href="#preco">Assinar — a partir de R$14,90/mês</a>
     <a class="btn" id="finalDemo" href="#">Abrir a demonstração</a>
   </div>
 </section>
@@ -488,8 +511,8 @@ footer a{color:var(--brand-hi)}
 <div class="overlay" id="pixModal">
   <div class="modal">
     <button class="close" id="pixClose" aria-label="Fechar">✕</button>
-    <h3>Pague com Pix — <span data-preco>R$47</span></h3>
-    <p>Escaneie o QR code no app do seu banco — ou copie o código abaixo e cole em "Pix copia e cola".</p>
+    <h3>Plano anual — <span data-preco>R$97</span> no Pix</h3>
+    <p>12 meses de acesso, à vista, sem taxa de plataforma. Escaneie o QR code no app do seu banco — ou copie o código e cole em "Pix copia e cola".</p>
     <div class="pixqr"><canvas id="pixQr" aria-label="QR code do Pix"></canvas></div>
     <div class="pixcode" id="pixCode">gerando…</div>
     <button class="btn gold" id="pixCopy">Copiar código Pix</button>
@@ -512,12 +535,15 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
    precisa editar antes de publicar. Salve e pronto.
    ====================================================================== */
 const CONFIG={
-  WHATSAPP:'5511998041794', // seu número com DDI+DDD, só dígitos. Ex: '5511999998888'
-  PIX_CHAVE:'costastawichs@gmail.com', // sua chave Pix (e-mail, telefone +55..., CPF só dígitos ou chave aleatória)
+  WHATSAPP:'5511998041794', // seu número com DDI+DDD, só dígitos
+  PIX_CHAVE:'costastawichs@gmail.com', // sua chave Pix
   PIX_NOME:'Guilherme Costa',   // nome do recebedor (como está no banco)
   PIX_CIDADE:'Franco da Rocha', // cidade do recebedor
-  PRECO:47,               // preço em reais
-  LINK_APP:'app.html'     // caminho do app (se seguir o COMO-VENDER, é app.html mesmo)
+  PRECO:97,                // Pix à vista = plano ANUAL (12 meses)
+  MENSAL:'14,90',          // preço da assinatura mensal (exibição)
+  KIWIFY_MENSAL:'https://pay.kiwify.com.br/4cjS0Gl', // checkout assinatura mensal
+  KIWIFY_ANUAL:'https://pay.kiwify.com.br/CfUhG34',  // checkout anual no cartão (até 12x)
+  LINK_APP:'app.html'
 };
 /* ====================================================================== */
 
@@ -567,13 +593,15 @@ function renderPixQr(payload){
   ctx.fillStyle='#000';
   for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(qr.isDark(r,c))ctx.fillRect((c+quiet)*cell,(r+quiet)*cell,cell,cell);
 }
-const MSG_COMPRA='Oi! Quero minha chave do StoryForge (R$'+CONFIG.PRECO+'). Meu e-mail para ativação é: ';
-const MSG_PAGO='Oi! Acabei de fazer o Pix do StoryForge (R$'+CONFIG.PRECO+'). Segue o comprovante. Meu e-mail para ativação é: ';
+const MSG_COMPRA='Oi! Quero assinar o StoryForge e tenho uma dúvida antes: ';
+const MSG_PAGO='Oi! Acabei de fazer o Pix do StoryForge (R$'+CONFIG.PRECO+' · plano anual). Segue o comprovante. Meu e-mail para ativação é: ';
 
 function init(){
   document.querySelectorAll('[data-preco]').forEach(el=>el.textContent='R$'+CONFIG.PRECO);
-  document.querySelectorAll('[data-preco-num]').forEach(el=>el.textContent=String(CONFIG.PRECO));
   ['navDemo','heroDemo','finalDemo','footDemo'].forEach(id=>{const a=document.getElementById(id);if(a)a.href=CONFIG.LINK_APP});
+  const km=$('#btnKiwifyMensal'),ka=$('#btnKiwifyAnual');
+  if(km)km.href=CONFIG.KIWIFY_MENSAL;
+  if(ka)ka.href=CONFIG.KIWIFY_ANUAL;
   const zap=$('#btnZap'),pixZap=$('#pixZap');
   if(CONFIG.WHATSAPP){
     zap.href=waLink(MSG_COMPRA);
@@ -596,7 +624,6 @@ function abrirPix(){
   $('#pixModal').classList.add('open');
 }
 $('#btnPix').addEventListener('click',abrirPix);
-$('#btnPixFinal').addEventListener('click',e=>{e.preventDefault();abrirPix()});
 $('#pixClose').addEventListener('click',()=>$('#pixModal').classList.remove('open'));
 $('#pixModal').addEventListener('click',e=>{if(e.target.id==='pixModal')$('#pixModal').classList.remove('open')});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#pixModal').classList.remove('open')});
