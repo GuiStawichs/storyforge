@@ -4,6 +4,6 @@
 
 - 🌐 **Site**: https://guistawichs.github.io/storyforge/
 - 🎬 **Demonstração aberta** (sem cadastro): https://guistawichs.github.io/storyforge/app.html
-- 🔑 Licença vitalícia · pagamento único via Pix · seus dados ficam no seu navegador
+- 🔑 Assinatura R$14,90/mês ou R$97/ano (Pix ou cartão) · seus dados ficam no seu navegador
 
 Feito por um dev independente no Brasil.
