@@ -543,6 +543,7 @@ const CONFIG={
   MENSAL:'14,90',          // preço da assinatura mensal (exibição)
   KIWIFY_MENSAL:'https://pay.kiwify.com.br/4cjS0Gl', // checkout assinatura mensal
   KIWIFY_ANUAL:'https://pay.kiwify.com.br/CfUhG34',  // checkout anual no cartão (até 12x)
+  KIWIFY_ATIVO:false,      // ← os checkouts Kiwify estão com "lote esgotado". Enquanto false, os botões de cartão/mensal caem no WhatsApp. Quando reativar o lote na Kiwify, mude para true.
   LINK_APP:'app.html'
 };
 /* ====================================================================== */
@@ -600,8 +601,14 @@ function init(){
   document.querySelectorAll('[data-preco]').forEach(el=>el.textContent='R$'+CONFIG.PRECO);
   ['navDemo','heroDemo','finalDemo','footDemo'].forEach(id=>{const a=document.getElementById(id);if(a)a.href=CONFIG.LINK_APP});
   const km=$('#btnKiwifyMensal'),ka=$('#btnKiwifyAnual');
-  if(km)km.href=CONFIG.KIWIFY_MENSAL;
-  if(ka)ka.href=CONFIG.KIWIFY_ANUAL;
+  if(CONFIG.KIWIFY_ATIVO){
+    if(km)km.href=CONFIG.KIWIFY_MENSAL;
+    if(ka)ka.href=CONFIG.KIWIFY_ANUAL;
+  }else{
+    // Kiwify com lote esgotado: os caminhos de cartão caem no WhatsApp até reativar
+    if(km){km.href=waLink('Oi! Quero assinar o StoryForge no plano mensal (R$'+CONFIG.MENSAL+'/mês). Como faço?');km.textContent='Assinar o mensal (pelo WhatsApp)'}
+    if(ka){ka.href=waLink('Oi! Quero o StoryForge no plano anual (R$'+CONFIG.PRECO+') parcelado no cartão. Como faço?');ka.textContent='12x no cartão (pelo WhatsApp)'}
+  }
   const zap=$('#btnZap'),pixZap=$('#pixZap');
   if(CONFIG.WHATSAPP){
     zap.href=waLink(MSG_COMPRA);
