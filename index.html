@@ -543,7 +543,7 @@ const CONFIG={
   MENSAL:'14,90',          // preço da assinatura mensal (exibição)
   KIWIFY_MENSAL:'https://pay.kiwify.com.br/4cjS0Gl', // checkout assinatura mensal
   KIWIFY_ANUAL:'https://pay.kiwify.com.br/CfUhG34',  // checkout anual no cartão (até 12x)
-  KIWIFY_ATIVO:false,      // ← os checkouts Kiwify estão com "lote esgotado". Enquanto false, os botões de cartão/mensal caem no WhatsApp. Quando reativar o lote na Kiwify, mude para true.
+  KIWIFY_ATIVO:true,       // ← true = botões de cartão/mensal vão direto aos checkouts Kiwify (testados e funcionando 2026-07-23). Se algum checkout cair de novo, mude para false que os botões caem no WhatsApp.
   LINK_APP:'app.html'
 };
 /* ====================================================================== */
